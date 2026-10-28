@@ -85,8 +85,8 @@ def create_products():
     app.logger.info("Product with new id [%s] saved!", product.id)
 
     message = product.serialize()
-
-
+    location_url = url_for("get_products", product_id=product.id, _external=True)
+    return jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
 
 
 ######################################################################
@@ -103,6 +103,9 @@ def list_products():
 
     products = []
     name = request.args.get("name")
+    category = request.args.get("category")
+    available = request.args.get("available")
+
     if name:
         app.logger.info("Find by name: %s", name)
         products = Product.find_by_name(name)
